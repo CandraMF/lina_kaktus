@@ -33,7 +33,7 @@
                     </div>                                               
                     <div class="form-group">
                         <label for="file">Gambar</label>
-                        <input type="file" name="file" capture class="form-control-file">
+                        <input type="file" name="file" id="file" capture class="form-control-file">
                     </div>                    
                     <div class="form-group">
                         <label for="deskripsi">Deskripsi</label>
@@ -54,8 +54,8 @@
             </div>  
             <div class="col-6 justify-content-center p-4">
                 <div class="row">
-                    <div class="col-md-12">
-                        <img src="/data_file/1584282864_IMG_4629.JPG" alt="" class="img-fluid">
+                    <div class="col-md-12">                                               
+                        <img src="" alt="" id="before" class="img-fluid">
                     </div>                           
                 </div>     
             </div>     
@@ -73,6 +73,10 @@
     <script>
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
+            document.getElementById('file').onchange = function () {
+                document.getElementById('before').src = window.URL.createObjectURL(this.files[0]);                          
+            };
         })
+        
     </script>
 @stop

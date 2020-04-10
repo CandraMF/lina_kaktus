@@ -30,7 +30,7 @@
                         <input type="text" placeholder="harga" name="harga">
                     </div>
                     <div class="form-group">
-                        <label for="deskripsi">deskripsi</label>
+                        <label for="deskripsi" >deskripsi</label>
                         <input type="text" placeholder="deskripsi" name="deskripsi">
                     </div>
                     <div class="form-group">
@@ -51,7 +51,6 @@
                         <input type="file" name="file">
                     </div>
                     
-
                     <div class="form-group">
                         <input type="submit" value="submit">
                     </div>

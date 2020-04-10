@@ -19,7 +19,10 @@
                                 <div class="input-group-text ">
                                     <span class="fas fa-envelope"></span>
                                 </div>
-                            </div>                        
+                            </div>  
+                            @if ($errors->has('username'))
+                                <span class="text-danger"><strong>{{ $errors->first('username') }}</strong></span>
+                            @endif                      
                         </div>
                         <div class="input-group mb-3">
                             <input type="password" name="password" class="form-control " placeholder="Password">

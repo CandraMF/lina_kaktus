@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Schema;
 
 use App\Barang;
 use App\Barang_kategori;
@@ -41,5 +42,27 @@ class KatalogController extends Controller
 
             return redirect('/katalog');
         }        
+    }
+
+    public function search(Request $request){        
+
+        $columns = Schema::getColumnListing('barang');
+        $query = Barang::query();
+
+        foreach($columns as $column){
+            $query->orWhere($column, 'LIKE', '%' . $request->search . '%');
+        }
+
+        $barang = $query->get();
+
+        if($barang->count() <=0 ){
+            $message = "barang tidak ditemukan";
+        }else{
+            $message = "hasil untuk ".$request->search;
+        }
+        
+        $kategori = Kategori::get();
+
+        return view('/katalog', ['barang' => $barang, 'kategori' => $kategori, 'message' => $message]);
     }
 }

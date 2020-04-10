@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use App\Barang;
 use App\Kategori;
 use App\Barang_kategori;
+use App\transaksi;
+use App\User;
 
 use File;
 
@@ -83,15 +85,18 @@ class BarangController extends Controller
         return view('link', ['wa' => $link]);
     }
 
-    public function delete(){
-        
+    public function delete($id){
+        $barang = Barang::find($id);
+        $barang->delete();
+
+        return redirect('/admin/barang');
     }
 
     public function edit($id){
         $barang = Barang::find($id);
         $barang_kategori = Barang_kategori::where('barang_id', $barang->id)->get()->toArray();
         $kategori = Kategori::get();
-
+        
         return view('admin/form_barang_edit', [
             'barang'            => $barang, 
             'kategori'          => $kategori,
@@ -103,29 +108,33 @@ class BarangController extends Controller
         $this->validate($request, [
             'id'        => 'required',
             'nama'      => 'required',            
-            'berat'     => 'required',
-            'file'      => 'required|mimes:jpg,jpeg,png,bmp|max:5000',
-            'deskripsi' => 'nullable',                                     
+            'berat'     => 'required',            
+            'deskripsi' => 'nullable',                                                 
         ]);
 
         $barang = Barang::find($request->id);
         $barangKategori = Barang_kategori::where('barang_id', $request->id);
         $barangKategori->delete();
-
         $barang->nama = $request->nama;        
         $barang->berat = $request->berat;
         //image
         $usersImage = public_path("data_file/$barang->gambar"); 
-        if (File::exists($usersImage)) { 
-            unlink($usersImage);
-        }
-        $file = $request->file('file');
-        $nama_file = time()."_".$file->getClientOriginalName();
-        $tujuan_upload = 'data_file';                          
-        $file->move($tujuan_upload, $nama_file);
+        
+        
+        if(isset($request->file)){
+            
+            if (File::exists($usersImage)) { 
+                unlink($usersImage);
+            }
 
-        $barang->gambar = $nama_file;
-        $barang->deskripsi = $request->deskripsi;  
+            $file = $request->file('file');
+            $nama_file = time()."_".$file->getClientOriginalName();
+            $tujuan_upload = 'data_file';                          
+            $file->move($tujuan_upload, $nama_file);  
+            $barang->gambar = $nama_file;
+        }
+        
+        $barang->deskripsi = $request->deskripsi;                        
 
         if(isset($request->kategori)){
             foreach($request->kategori as $k){
@@ -141,9 +150,25 @@ class BarangController extends Controller
         return redirect('/admin/barang');
     }
 
-    public function trash($id){
+    public function search(Request $request){
+        $columns = Schema::getColumnListing('barang');
+        $query = Barang::query();
 
+        foreach($columns as $column){
+            $query->orWhere($column, 'LIKE', '%' . $request . '%');
+        }
+
+        $barang = $query->get();
+
+        return view('katalog', ['barang' => $barang]);
     }
+
+    public function transaksi(){
+        $transaksi = transaksi::get();        
+
+        return view('admin/transaksi', ['transaksi' => $transaksi]);
+    }
+    
     
 }
 

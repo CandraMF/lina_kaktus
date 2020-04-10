@@ -3,26 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Barang;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
 
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        return view('home');
+    public function index(){
+        $barang = Barang::with(['kategori' => function ($query) {
+            $query->where('nama', 'like', '%terlaris%');
+        }])->skip(0)->take(4)->get();
+        
+        return view('welcome',['barang' => $barang]);
     }
 }

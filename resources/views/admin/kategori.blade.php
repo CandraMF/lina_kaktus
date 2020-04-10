@@ -16,7 +16,7 @@
         </div>
     </div>    
     <div class="col-md-12">
-        <table class="table table-bordered table-striped table-hover table-light table-responsive text-nowrap ">
+        <table class="table table-sm table-bordered table-striped table-hover table-light table-responsive text-nowrap ">
             <thead class="bg-green">
                 <tr class="text-center">
                     <th width="1%">Id</th>

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App   ;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Authenticatable
+class Admin extends Model
 {
-    protected $guard = 'admin';
+    protected $guard = 'admins';
     
     protected $fillable = ['username', 'password'];
 

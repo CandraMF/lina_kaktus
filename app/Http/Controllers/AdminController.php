@@ -6,45 +6,68 @@ use Illuminate\Http\Request;
 use App\Barang;
 use App\Kategori;
 use App\Admin;
-use Session;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
-{
+{    
+
     public function index(){
-        if(Session::has('admon')){
+        if(!Session::get('admin')){
+            return redirect('/admin/login')->with('alert','Kamu harus login dulu');
+        }
+        else{
             return view('admin/dashboard');
-        }else{
-            return view('admin/login');
         }
     }
+
+    public function login(){
+        return view('admin/login');
+    }
+
+    public function login_proses(Request $request){
+        $username = $request->username;
+        $password = $request->password;
+
+        $data = Admin::where('username', $username)->first();
+        if($data){
+            if($password == $data->password){
+                Session::put('username', $data->username);                
+                Session::put('admin', TRUE);                
+                return redirect('/admin/dashboard');
+            }
+            else{
+                return redirect('/admin/login')->with('alert','Password atau Email, Salah !');
+            }
+        }else{
+            return redirect('/admin/login')->with('alert','Password atau Email, Salah !');
+        }
+    }
+
     public function barang(){
+
+        if(!Session::get('admin')){
+            return redirect('/admin/login')->with('alert','Kamu harus login dulu');
+        }        
         $barang = Barang::get();        
         
         return view('admin/barang', ['barang' => $barang]);
     }
 
     public function kategori(){
+        if(!Session::get('admin')){
+            return redirect('/admin/login')->with('alert','Kamu harus login dulu');
+        }
+
         $kategori = Kategori::get();
 
         return view('admin/kategori', ['kategori' => $kategori]);
     }
-
-    public function login(Request $request){
-        $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required',
-        ]);
-
-        if(Admin::where('username', $request->username, 'AND', 'password', $request->password)){
-            return redirect('/admin')->with('admon', TRUE);
-        }else{
-            return view('admin/login');
-        }
-    }
-
+   
     public function logout(){
         Session::flush();        
-        return redirect('/admin');
+        return redirect('/');
     }
     
     

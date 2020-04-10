@@ -16,7 +16,7 @@
     </div>
 
     <div class="col-md-12">
-        <table class="table table-bordered table-striped table-hover table-light table-responsive text-nowrap ">
+        <table class="table table-sm table-bordered table-striped table-hover table-light table-responsive text-nowrap ">
             <thead class="bg-green">
                 <tr class="text-center">
                     <th width="1%">Id</th>
@@ -33,10 +33,10 @@
                         <td>{{ $b->id }}</td>
                         <td>{{ $b->nama }}</td>                        
                         <td>{{ $b->berat }}</td>
-                        <td>{{ $b->deskripsi }}</td>                        
+                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">{{ $b->deskripsi }}</td>                        
                         <td class="text-center">
                             <a href="/admin/barang/edit/{{ $b->id }}" class="btn btn-success btn-sm">Edit</a> &nbsp;
-                            <a href="/admin/barang/hapus/{{ $b->id }}" class="btn btn-danger btn-sm">Hapus</a>
+                            <a href="/admin/barang/hapus/{{ $b->id }}" class="btn btn-danger btn-sm" onClick="<?php echo 'return confirm (\'Are you sure want to delete?\')'; ?>">Hapus</a>
                         </td>
                     </tr>                    
                 @endforeach            
